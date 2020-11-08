@@ -4,8 +4,8 @@ import React from "react";
 
 //text manda a llamar mas de un solo elemento
 import { StyleSheet, Text, View, Image ,Dimensions} from "react-native";
-import { Input, Container, Item, Form, H1, Button, Header, Right, Left } from "native-base";
-
+import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon } from "native-base";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 //dimension poder ajustar ancho y alto de las imagenes
 //width .,,, para estirarla a lo alto height * 0.30 tercio de pantalla 
@@ -19,19 +19,13 @@ const {width, height} = Dimensions.get("window");
 const MenuProductScreen = () => {
     return(
         <Container style={{backgroundColor: "#ff0000"}}>
-          <Header>
-            <Left style={{ flex: 1}} >
-            <Form>
+          <Header searchBar  >
                 <Item>
-                    <Input inlineLabel placeholder="Buscar" />
+                    <Input placeholder="Buscar" />
                 </Item>
-            </Form>
-            </Left>
-            <Right>
             <Button>
-                <Text> Buscar </Text>
+                <MaterialCommunityIcons name="shopping-search" size={24} color="black" /> 
             </Button>
-            </Right>
         </Header>
             <H1 style={{marginTop: 10}}>PRODUCTO</H1>
             <Image source={require("../../assets/LOGOnet504MOVIL1.png")} 
