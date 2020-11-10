@@ -6,6 +6,10 @@ import React from "react";
 import { StyleSheet, Text, View, Image ,Dimensions} from "react-native";
 import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon } from "native-base";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import backend from "../api/backend";
+import getEnvVars from "../../enviroments";
+
+const { apiKey } = getEnvVars();
 
 //dimension poder ajustar ancho y alto de las imagenes
 //width .,,, para estirarla a lo alto height * 0.30 tercio de pantalla 
@@ -17,13 +21,25 @@ const {width, height} = Dimensions.get("window");
 //H1 ESTILOS 
 //image Para representacion de logo  
 const MenuProductScreen = () => {
+    //maneja el estado de los productos
+    const [product, setProduct] = useState(null);
+    
+    const getProduct = async () =>{
+        //consulta la api de amazon product
+        const response = await backend.get(`product?api_key=${apiKey}country=US&asin=B07CVL2D2S&`) ;
+
+        console.log(response.data);
+    }
+
+    getProduct();
+
     return(
-        <Container style={{backgroundColor: "#ff0000"}}>
-          <Header searchBar  >
+        <Container style={{backgroundColor: "#b90023"}}>
+          <Header searchBar style={{backgroundColor: "#14BBDF"}} >
                 <Item>
                     <Input placeholder="Buscar" />
                 </Item>
-            <Button>
+            <Button >
                 <MaterialCommunityIcons name="shopping-search" size={24} color="black" /> 
             </Button>
         </Header>
