@@ -1,10 +1,10 @@
 //Importacion de modulos necesarios
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //text manda a llamar mas de un solo elemento
-import { StyleSheet, Text, View, Image ,Dimensions} from "react-native";
-import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon } from "native-base";
+import { StyleSheet, Text, View, Image ,Dimensions, FlatList} from "react-native";
+import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon, Spinner, Card, CardItem, Body} from "native-base";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
@@ -23,15 +23,38 @@ const {width, height} = Dimensions.get("window");
 const MenuProductScreen = () => {
     //maneja el estado de los productos
     const [product, setProduct] = useState(null);
-    
-    const getProduct = async () =>{
-        //consulta la api de amazon product
-        const response = await backend.get(`product?api_key=${apiKey}country=US&asin=B07CVL2D2S&`) ;
+    const [error, setError] = useState(false);
+    const [search, setSearch]= useState("");
 
-        console.log(response.data);
+    //promesas siempre deben ir dentro de un try catch
+
+    const getProduct = async () => {
+      try {
+           //consulta la api de amazon product
+           const response = await backend.get(`product?country=US&asin=B07CVL2D2S`);
+
+           console.log(response.data); 
+           
+    } catch (error) {
+        //error al momento de ejecutar la peticion a la api
+        setError(true);
     }
+  }
 
-    getProduct();
+    if (!product) {
+     return(
+       <View style={{flex: 1, justifyContent : "center"}}>
+       <Spinner color="blue" />
+       </View>    
+    )   
+  }
+
+//hook use effect
+    useEffect(() =>{
+
+     getProduct();
+
+    },[]);
 
     return(
         <Container style={{backgroundColor: "#b90023"}}>
@@ -44,6 +67,26 @@ const MenuProductScreen = () => {
             </Button>
         </Header>
             <H1 style={{marginTop: 10}}>PRODUCTO</H1>
+            <FlatList
+                data={product.results}
+                    keyExtractor={(item) => item.asin}
+                    ListEmptyComponent={<Text>No se han encontrado prouctos </Text>}
+                    renderItem={({ item }) => { 
+                    return(
+                     <View>
+                       <Card>
+                         <CardItem>
+                             <Body>
+                                <image source= {item.images} alt={item.images} style={styles.productImage} />
+                                <Text>{item.title}</Text>
+                             </Body>
+                         </CardItem>
+                       </Card>
+                    </View>
+                    )
+              }}    
+            />
+
             <Image source={require("../../assets/LOGOnet504MOVIL1.png")} 
             style={styles.imagenLogo}
             />
