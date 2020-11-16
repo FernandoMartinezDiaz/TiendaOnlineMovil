@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
 
-const { apiKey } = getEnvVars();
+const { apiKey,apiImageUrl } = getEnvVars();
 
 //dimension poder ajustar ancho y alto de las imagenes
 //width .,,, para estirarla a lo alto height * 0.30 tercio de pantalla 
@@ -31,9 +31,9 @@ const MenuProductScreen = () => {
     const getProduct = async () => {
       try {
            //consulta la api de amazon product
-           const response = await backend.get(`product?country=US&asin=B07CVL2D2S`);
+           const response = await backend.get(`offers?min_number=5&country=US&type=LIGHTNING_DEAL&max_number=100`);
 
-           console.log(response.data); 
+           setProduct(response.data); 
            
     } catch (error) {
         //error al momento de ejecutar la peticion a la api
@@ -41,20 +41,18 @@ const MenuProductScreen = () => {
     }
   }
 
-    if (!product) {
-     return(
-       <View style={{flex: 1, justifyContent : "center"}}>
-       <Spinner color="blue" />
-       </View>    
-    )   
+//Hook de efecto
+   useEffect(() =>{
+    getProduct();
+   });
+
+   if (!product ){
+    return(
+      <View style={{flex: 1, justifyContent : "center"}}>
+      <Spinner color="red" />
+      </View>
+      )
   }
-
-//hook use effect
-    useEffect(() =>{
-
-     getProduct();
-
-    },[]);
 
     return(
         <Container style={{backgroundColor: "#b90023"}}>
@@ -68,18 +66,21 @@ const MenuProductScreen = () => {
         </Header>
             <H1 style={{marginTop: 10}}>PRODUCTO</H1>
             <FlatList
-                data={product.results}
+                data={product.offers}
                     keyExtractor={(item) => item.asin}
                     ListEmptyComponent={<Text>No se han encontrado prouctos </Text>}
                     renderItem={({ item }) => { 
                     return(
                      <View>
                        <Card>
-                         <CardItem>
-                             <Body>
-                                <image source= {item.images} alt={item.images} style={styles.productImage} />
+                         <CardItem style={styles.CardItem} cardBody>
+                            {
+                                item.images.map((images)=>
+                                <Image key={images.id} source={{uri: images}}  style={styles.productImage}></Image>
                                 <Text>{item.title}</Text>
-                             </Body>
+                                <Text>{item.price}</Text>
+                                )  
+                            }  
                          </CardItem>
                        </Card>
                     </View>
@@ -90,7 +91,6 @@ const MenuProductScreen = () => {
             <Image source={require("../../assets/LOGOnet504MOVIL1.png")} 
             style={styles.imagenLogo}
             />
-            <Text> CATALOGO DE PRODUCTOS </Text>
         </Container> 
     );
 };
@@ -117,7 +117,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop :25,
         marginRight :15,
-    }
+    },
+    productImage: {
+        width: 100,
+        height: 300,
+        //resizeMode: "center",
+    },
+
 });
     
 
