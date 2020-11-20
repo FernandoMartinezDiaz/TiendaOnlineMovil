@@ -17,10 +17,13 @@ const { apiKey,apiImageUrl } = getEnvVars();
 const {width, height} = Dimensions.get("window");
 
 //Creacion de variableas que contienen nuestra pantalla 
+
+//variable contiene la pantalla renderizada 
+
 //arrow function ==>
 //H1 ESTILOS 
 //image Para representacion de logo  
-const MenuProductScreen = () => {
+const MenuProductScreen = ({ navigation }) => {
     //maneja el estado de los productos
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(false);
@@ -58,9 +61,9 @@ const MenuProductScreen = () => {
         <Container style={{backgroundColor: "#b90023"}}>
           <Header searchBar style={{backgroundColor: "#14BBDF"}} >
                 <Item>
-                    <Input placeholder="Buscar" />
+                    <Input placeholder="Buscar" value= {search} onChangeText={setSearch}/>
                 </Item>
-            <Button >
+            <Button icon onPress={() => { navigation.navigate("resultadodebusqueda", {search})}}>
                 <MaterialCommunityIcons name="shopping-search" size={24} color="black" /> 
             </Button>
         </Header>
@@ -72,15 +75,17 @@ const MenuProductScreen = () => {
                     renderItem={({ item }) => { 
                     return(
                      <View>
-                       <Card>
-                         <CardItem style={styles.CardItem} cardBody>
+                       <Card style = {{backgroundColor: "transparent"}} >
+                         <CardItem style={styles.CardStyle}   cardBody>
                             {
                                 item.images.map((images)=>
                                 <Image key={images.id} source={{uri: images}}  style={styles.productImage}></Image>
-                                <Text>{item.title}</Text>
-                                <Text>{item.price}</Text>
                                 )  
                             }  
+                         </CardItem>
+                         <CardItem style={styles.CardStyle} >
+                            <Text>{item.title}</Text>
+                            <Text>{item.price}</Text>
                          </CardItem>
                        </Card>
                     </View>
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     Input: {
-        margin: 15,
+        margin: 20,
     },
     imagenLogo: {
         width: 100,
@@ -119,8 +124,16 @@ const styles = StyleSheet.create({
         marginRight :15,
     },
     productImage: {
-        width: 100,
-        height: 300,
+        width: width * 0.81,
+        height: height * 0.35,
+        margin:25,
+        //resizeMode: "contain",
+        //resizeMode: "center",
+    },
+
+    CardStyle: {
+        marginHorizontal: 10,
+        backgroundColor: "transparent",
         //resizeMode: "center",
     },
 
