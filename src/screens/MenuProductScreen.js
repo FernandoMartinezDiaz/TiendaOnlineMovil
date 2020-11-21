@@ -47,7 +47,7 @@ const MenuProductScreen = ({ navigation }) => {
 //Hook de efecto
    useEffect(() =>{
     getProduct();
-   });
+   }, []);
 
    if (!product ){
     return(
