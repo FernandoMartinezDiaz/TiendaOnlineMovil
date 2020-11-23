@@ -8,6 +8,7 @@ import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon, Sp
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { apiKey,apiImageUrl } = getEnvVars();
 
@@ -59,15 +60,15 @@ const MenuProductScreen = ({ navigation }) => {
 
     return(
         <Container style={{backgroundColor: "#b90023"}}>
-          <Header searchBar style={{backgroundColor: "#14BBDF"}} >
-                <Item>
+          <Header searchBar style={{backgroundColor: "#14BBDF"}} androidStatusBarColor="#004e64" >
+                <Item style={{ flex: 3 }}>
                     <Input placeholder="Buscar" value= {search} onChangeText={setSearch}/>
                 </Item>
-            <Button icon onPress={() => { navigation.navigate("resultadodebusqueda", {search})}}>
-                <MaterialCommunityIcons name="shopping-search" size={24} color="black" /> 
+            <Button icon onPress={() => { navigation.navigate("resultadodebusqueda", {search})}} style={styles.searchButton}>
+                <MaterialCommunityIcons name="shopping-search" size={24} color="white" /> 
             </Button>
         </Header>
-            <H1 style={{marginTop: 10}}>PRODUCTO</H1>
+            <H1 style={{margin : 10 }}>PRODUCTOS EN OFERTAS</H1>
             <FlatList
                 data={product.offers}
                     keyExtractor={(item) => item.asin}
@@ -75,19 +76,23 @@ const MenuProductScreen = ({ navigation }) => {
                     renderItem={({ item }) => { 
                     return(
                      <View>
-                       <Card style = {{backgroundColor: "transparent"}} >
-                         <CardItem style={styles.CardStyle}   cardBody>
-                            {
-                                item.images.map((images)=>
-                                <Image key={images.id} source={{uri: images}}  style={styles.productImage}></Image>
-                                )  
-                            }  
-                         </CardItem>
-                         <CardItem style={styles.CardStyle} >
-                            <Text>{item.title}</Text>
-                            <Text>{item.price}</Text>
-                         </CardItem>
-                       </Card>
+                       <TouchableOpacity onPress={() => navigation.navigate("productinfo" ,{id: item.asin})}>
+                            <Card style = {{backgroundColor: "transparent"}} >
+                                <CardItem style={styles.CardStyle}   cardBody>
+                                    {
+                                        item.images.map((images)=>
+                                        <Image key={images.id} source={{uri: images}}  style={styles.productImage}></Image>
+                                        )  
+                                    }  
+                                </CardItem>
+                                <CardItem style={styles.CardStyle} >
+                                    <Text>{item.title}</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Text>   Precio del producto: {item.prices.current_price}$</Text>
+                                </CardItem>
+                            </Card>
+                      </TouchableOpacity>
                     </View>
                     )
               }}    
@@ -119,8 +124,8 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
-        flexDirection: "row",
-        marginTop :25,
+        flexDirection: "column",
+        marginTop :10,
         marginRight :15,
     },
     productImage: {
@@ -135,6 +140,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         backgroundColor: "transparent",
         //resizeMode: "center",
+    },
+
+    searchButton: {
+        flex: 1,
+        backgroundColor: "#1034A6",
+        marginLeft: 10,
+        height: 40,
     },
 
 });

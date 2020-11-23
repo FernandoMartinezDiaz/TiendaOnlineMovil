@@ -54,11 +54,13 @@ const ProductSearchResults = ({ route, navigation }) => {
                     <View>
                       <Card style = {{backgroundColor: "transparent"}} >
                         <CardItem style={styles.CardStyle}   cardBody>
-                               <Image source={{uri: `${apiImageUrl}${item.image}`}}  style={styles.productImage}/>
+                               <Image source={{uri: `${item.image}`}}  style={styles.productImage}/>
                         </CardItem>
                         <CardItem style={styles.CardStyle} >
                            <Text>{item.title}</Text>
-                           <Text>{item.price}</Text>
+                        </CardItem>
+                        <CardItem>
+                            <Text>   Precio del producto: {item.prices.current_price}$</Text>
                         </CardItem>
                       </Card>
                    </View>
@@ -74,8 +76,8 @@ const styles = StyleSheet.create({
     productImage: {
         width: width * 0.81,
         height: height * 0.35,
-        margin:25,
-        //resizeMode: "contain",
+        marginLeft: 35,
+        resizeMode: "contain",
         //resizeMode: "center",
     },
 
