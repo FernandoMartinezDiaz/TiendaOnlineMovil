@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { SocialIcon } from 'react-native-elements';
 
 const { apiKey,apiImageUrl } = getEnvVars();
 
@@ -119,11 +118,6 @@ const MenuProductScreen = ({ navigation }) => {
             <Image source={require("../../assets/LOGOnet504MOVIL1.png")} 
             style={styles.imagenLogo}
             />
-            
-
-            <SocialIcon style={styles.iconos} 
-                type='facebook'
-            />
         </Container> 
     );
 };
@@ -171,12 +165,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         height: 40,
     },
-
-    iconos: {
-        marginLeft: 350,
-    
-    }
-
 
 
 });
