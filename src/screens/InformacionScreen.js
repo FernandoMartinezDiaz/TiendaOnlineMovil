@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         width: width * 0.81,
         height: height * 0.35,
         margin:25,
-        //resizeMode: "contain",
+        resizeMode: "contain"
         //resizeMode: "center",
     
     },

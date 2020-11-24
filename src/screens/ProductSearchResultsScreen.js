@@ -45,7 +45,7 @@ const ProductSearchResults = ({ route, navigation }) => {
     }
 
     return (
-        <Container>
+        <Container style={styles.contenido}>
             <H1>Resultados de la busqueda : {search}</H1>
             <FlatList 
             data={product.results}
@@ -88,6 +88,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         backgroundColor: "transparent",
         //resizeMode: "center",
+    },
+
+    contenido:{
+        backgroundColor: "#b90023",
     },
 });
 
