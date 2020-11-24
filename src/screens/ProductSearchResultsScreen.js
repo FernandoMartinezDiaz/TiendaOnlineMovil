@@ -4,6 +4,7 @@ import { StyleSheet ,View ,Text, Dimensions, Image } from "react-native"
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
 import { FlatList } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { apiUrl , apiKey, apiUrlSearch, apiImageUrl} = getEnvVars();
 
@@ -52,17 +53,19 @@ const ProductSearchResults = ({ route, navigation }) => {
             renderItem={({item}) => {
                 return(
                     <View>
-                      <Card style = {{backgroundColor: "transparent"}} >
-                        <CardItem style={styles.CardStyle}   cardBody>
-                               <Image source={{uri: `${item.image}`}}  style={styles.productImage}/>
-                        </CardItem>
-                        <CardItem style={styles.CardStyle} >
-                           <Text>{item.title}</Text>
-                        </CardItem>
-                        <CardItem>
-                            <Text>   Precio del producto: {item.prices.current_price}$</Text>
-                        </CardItem>
-                      </Card>
+                      <TouchableOpacity onPress={() => navigation.navigate("productinfo" ,{id: item.asin})}>
+                            <Card style = {{backgroundColor: "transparent"}} >
+                                <CardItem style={styles.CardStyle}   cardBody>
+                                    <Image source={{uri: `${item.image}`}}  style={styles.productImage}/>
+                                </CardItem>
+                                <CardItem style={styles.CardStyle} >
+                                <Text>{item.title}</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Text>   Precio del producto: {item.prices.current_price}$</Text>
+                                </CardItem>
+                            </Card>
+                      </TouchableOpacity>
                    </View>
                    )
             }}

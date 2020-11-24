@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react";
 
 //text manda a llamar mas de un solo elemento
 import { StyleSheet, Text, View, Image ,Dimensions, FlatList} from "react-native";
-import { Input, Container, Item, Form, H1, Button, Header, Right, Left, Icon, Spinner, Card, CardItem, Body} from "native-base";
+import { Input, Container, Item, H1, Button, Header, Spinner, Card, CardItem} from "native-base";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import backend from "../api/backend";
 import getEnvVars from "../../enviroments";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SocialIcon } from 'react-native-elements';
 
 const { apiKey,apiImageUrl } = getEnvVars();
 
@@ -29,6 +30,7 @@ const MenuProductScreen = ({ navigation }) => {
     const [product, setProduct] = useState(null);
     const [error, setError] = useState(false);
     const [search, setSearch]= useState("");
+    const [searchError, setSearchError]= useState(false);
 
     //promesas siempre deben ir dentro de un try catch
 
@@ -45,6 +47,16 @@ const MenuProductScreen = ({ navigation }) => {
     }
   }
 
+  
+  const handlerSearch = () => {
+    if (!search) setSearchError(true);
+    else {
+         navigation.navigate("resultadodebusqueda", {search});
+      setSearch("");
+      setSearchError(false);
+    }
+  };
+
 //Hook de efecto
    useEffect(() =>{
     getProduct();
@@ -60,19 +72,25 @@ const MenuProductScreen = ({ navigation }) => {
 
     return(
         <Container style={{backgroundColor: "#b90023"}}>
-          <Header searchBar style={{backgroundColor: "#14BBDF"}} androidStatusBarColor="#004e64" >
+          <Header searchBar style={{backgroundColor: "#1034A6"}} androidStatusBarColor="#004e64" >
                 <Item style={{ flex: 3 }}>
-                    <Input placeholder="Buscar" value= {search} onChangeText={setSearch}/>
+                    <Input placeholder={
+                        searchError ? "Ingresa un valor de búsqueda" : "Buscar..."
+                        }
+                            placeholderTextColor={searchError ? "red" : "gray"}
+                            value={search}
+                            onChangeText={setSearch}
+                    />
                 </Item>
-            <Button icon onPress={() => { navigation.navigate("resultadodebusqueda", {search})}} style={styles.searchButton}>
-                <MaterialCommunityIcons name="shopping-search" size={24} color="white" /> 
+            <Button icon onPress={ handlerSearch } style={styles.searchButton}>
+                <MaterialCommunityIcons name="shopping-search" size={24} color="black" /> 
             </Button>
         </Header>
             <H1 style={{margin : 10 }}>PRODUCTOS EN OFERTAS</H1>
             <FlatList
                 data={product.offers}
                     keyExtractor={(item) => item.asin}
-                    ListEmptyComponent={<Text>No se han encontrado prouctos </Text>}
+                    ListEmptyComponent={<Text>No se han encontrado productos</Text>}
                     renderItem={({ item }) => { 
                     return(
                      <View>
@@ -80,16 +98,16 @@ const MenuProductScreen = ({ navigation }) => {
                             <Card style = {{backgroundColor: "transparent"}} >
                                 <CardItem style={styles.CardStyle}   cardBody>
                                     {
-                                        item.images.map((images)=>
+                                        item.images.map((images,index) => (
                                         <Image key={images.id} source={{uri: images}}  style={styles.productImage}></Image>
-                                        )  
+                                        ))  
                                     }  
                                 </CardItem>
                                 <CardItem style={styles.CardStyle} >
                                     <Text>{item.title}</Text>
                                 </CardItem>
                                 <CardItem>
-                                    <Text>   Precio del producto: {item.prices.current_price}$</Text>
+                                    <Text >  Price: {item.prices.current_price}$</Text>
                                 </CardItem>
                             </Card>
                       </TouchableOpacity>
@@ -100,6 +118,11 @@ const MenuProductScreen = ({ navigation }) => {
 
             <Image source={require("../../assets/LOGOnet504MOVIL1.png")} 
             style={styles.imagenLogo}
+            />
+            
+
+            <SocialIcon style={styles.iconos} 
+                type='facebook'
             />
         </Container> 
     );
@@ -144,10 +167,17 @@ const styles = StyleSheet.create({
 
     searchButton: {
         flex: 1,
-        backgroundColor: "#1034A6",
+        backgroundColor: "#14BBDF",
         marginLeft: 10,
         height: 40,
     },
+
+    iconos: {
+        marginLeft: 350,
+    
+    }
+
+
 
 });
     
