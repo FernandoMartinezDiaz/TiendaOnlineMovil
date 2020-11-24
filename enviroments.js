@@ -7,7 +7,7 @@ const ENV = {
         apiHost:"amazon-products1.p.rapidapi.com",
         apiImageUrl:"https://images-na.ssl-images-amazon.com/images/I/",
         apiUrlSearch: "https://m.media-amazon.com/images/I/",
-        useQuery: "true" 
+        useQuery: "true", 
     },
     default: {
         apiUrl: "https://amazon-products1.p.rapidapi.com/",
@@ -15,7 +15,7 @@ const ENV = {
         apiHost:"amazon-products1.p.rapidapi.com",
         apiImageUrl:"https://images-na.ssl-images-amazon.com/images/I/",
         apiUrlSearch: "https://m.media-amazon.com/images/I/",
-        useQuery: "true"
+        useQuery: "true",
     },
 };
 
@@ -23,7 +23,7 @@ const getEnvVars = (env = Constants.manifest.realeaseChannel) => {
 
     if (__DEV__) {
         return ENV.dev;
-    }else if (env == "default"){
+    }else if (env === "default"){
         return ENV.default;
     }
 };
