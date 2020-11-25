@@ -24,7 +24,7 @@ const getEnvVars = (env = Constants.manifest.realeaseChannel) => {
 
     if (__DEV__) {
         return ENV.dev;
-    } else if (env === "default") {
+    } else if (env == "default") {
       return ENV.default;
     }
 };
